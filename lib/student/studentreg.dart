@@ -46,59 +46,50 @@ class _StudentregState extends State<Studentreg> {
                     height: 40,
                   ),
                   buildTextfield(
-                    context,
-                    Icon(
-                      Icons.perm_identity_rounded,
-                    ),
-                    'RegNo',
-                    registernoController,
-                    false,
-                    (value) {
-                      if (value!.isEmpty) {
-                        return 'invalid';
-                      }
-                      return null;
-                    },
-                    SizedBox(),
-                  ),
+                      context,
+                      Icon(
+                        Icons.perm_identity_rounded,
+                      ),
+                      'RegNo',
+                      registernoController,
+                      false, (value) {
+                    if (value!.isEmpty) {
+                      return 'invalid';
+                    }
+                    return null;
+                  }, SizedBox(), 1),
                   SizedBox(
                     height: 10,
                   ),
                   buildTextfield(
-                    context,
-                    Icon(
-                      Icons.person_2,
-                    ),
-                    'Name',
-                    nameController,
-                    false,
-                    (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'invalid';
-                      }
-                      return null;
-                    },
-                    SizedBox(),
-                  ),
+                      context,
+                      Icon(
+                        Icons.person_2,
+                      ),
+                      'Name',
+                      nameController,
+                      false, (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'invalid';
+                    }
+                    return null;
+                  }, SizedBox(), 1),
                   SizedBox(
                     height: 10,
                   ),
                   buildTextfield(
-                    context,
-                    Icon(
-                      Icons.email,
-                    ),
-                    'Email',
-                    emailController,
-                    false,
-                    (value) {
-                      if (value!.isEmpty) {
-                        return 'invalid';
-                      }
-                      return null;
-                    },
-                    SizedBox(),
-                  ),
+                      context,
+                      Icon(
+                        Icons.email,
+                      ),
+                      'Email',
+                      emailController,
+                      false, (value) {
+                    if (value!.isEmpty) {
+                      return 'invalid';
+                    }
+                    return null;
+                  }, SizedBox(), 1),
                   SizedBox(
                     height: 10,
                   ),
@@ -120,7 +111,8 @@ class _StudentregState extends State<Studentreg> {
                         icon: visibility
                             ? Icon(Icons.visibility_off)
                             : Icon(Icons.visibility),
-                      )),
+                      ),
+                      1),
                   SizedBox(
                     height: 20,
                   ),

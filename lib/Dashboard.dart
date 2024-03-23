@@ -4,15 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:stdproject/login.dart';
 import 'package:stdproject/provider/myProvider.dart';
 
-class Dashboard extends StatefulWidget {
+class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
 
-  @override
-  State<Dashboard> createState() => _DashboardState();
-}
-
-class _DashboardState extends State<Dashboard> {
-  void navigation(screen) {
+  void navigation(screen,context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
   }
 
@@ -39,7 +34,7 @@ class _DashboardState extends State<Dashboard> {
                       onPressed: () {
                         navigation(login(
                           text: 'Teacher',
-                        ));
+                        ),context);
                       },
                       child: Text("TEACHER"))),
               SizedBox(
@@ -55,12 +50,13 @@ class _DashboardState extends State<Dashboard> {
                       onPressed: () {
                         navigation(login(
                           text: 'Student',
-                        ));
+                        ),context);
                       },
                       child: Text("STUDENT"))),
               SizedBox(
                 height: 20,
               ),
+             
             ],
           ),
         )),

@@ -15,9 +15,9 @@ class AdminMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
-     DateTime? currentBackPressTime;
+    DateTime? currentBackPressTime;
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         if (currentBackPressTime == null ||
             DateTime.now().difference(currentBackPressTime!) >
                 Duration(seconds: 2)) {
@@ -39,50 +39,38 @@ class AdminMain extends StatelessWidget {
         }
       },
       child: Scaffold(
-         backgroundColor: Colors.transparent,
+          backgroundColor: Color.fromRGBO(62, 62, 61, 1),
           appBar: AppBar(
-            backgroundColor: Colors.white,
+            backgroundColor: Color.fromARGB(255, 3, 157, 246),
             elevation: 0,
             actions: [
               IconButton(
                   onPressed: () {
                     provider.signOutUser(context);
-                    
                   },
                   icon: Icon(Icons.logout))
             ],
           ),
           body: Stack(
             children: [
-              Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(
-                  'https://i.pinimg.com/736x/8c/98/99/8c98994518b575bfd8c949e91d20548b.jpg',
-                ),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+              Container(),
               Center(
                 child: Container(
-              
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-              
-              
                       buildContainer(
                           context,
                           'Upload or View',
-                         
                           Icon(
                             Icons.upload,
                             color: Colors.white,
                           ), () {
-                        navigation(UploadViewScreen(
-                          role: 'admin',
-                        ),context);
+                        navigation(
+                            UploadViewScreen(
+                              role: 'admin',
+                            ),
+                            context);
                       }),
                       SizedBox(
                         height: 30,
@@ -90,12 +78,11 @@ class AdminMain extends StatelessWidget {
                       buildContainer(
                           context,
                           'Add Staff',
-                         
                           Icon(
                             Icons.person_add_alt_outlined,
                             color: Colors.white,
                           ), () {
-                        navigation(StaffRegister(),context);
+                        navigation(StaffRegister(), context);
                       }),
                       SizedBox(
                         height: 30,
@@ -103,12 +90,11 @@ class AdminMain extends StatelessWidget {
                       buildContainer(
                           context,
                           'Notifications',
-                         
                           Icon(
                             Icons.notification_add,
                             color: Colors.white,
                           ), () {
-                        navigation(NotificationAdd(),context);
+                        navigation(NotificationAdd(), context);
                       })
                     ],
                   ),
@@ -119,7 +105,7 @@ class AdminMain extends StatelessWidget {
     );
   }
 
-  void navigation(screen,context) {
+  void navigation(screen, context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
   }
 }

@@ -37,24 +37,19 @@ class _UploadViewScreenState extends State<UploadViewScreen> {
   List<String> subjects = ['Select subject'];
   late String filePath = 'No file selected';
 
- 
   void updateSubjects(String selectedSemester) {
     setState(() {
       if (selectedSemester == 'sem 1') {
         subjects = [...sem1sub];
       } else if (selectedSemester == 'sem 6') {
         subjects = [...sem6sub];
-      }
-      else if (selectedSemester == 'sem 2') {
+      } else if (selectedSemester == 'sem 2') {
         subjects = [...sem2sub];
-      }
-      else if (selectedSemester == 'sem 3') {
+      } else if (selectedSemester == 'sem 3') {
         subjects = [...sem3sub];
-      }
-      else if (selectedSemester == 'sem 4') {
+      } else if (selectedSemester == 'sem 4') {
         subjects = [...sem4sub];
-      }
-      else if (selectedSemester == 'sem 5') {
+      } else if (selectedSemester == 'sem 5') {
         subjects = [...sem5sub];
       } else {
         subjects = ['Select subject'];
@@ -86,7 +81,7 @@ class _UploadViewScreenState extends State<UploadViewScreen> {
     try {
       String fileName = imageFile.path;
       Reference storageReference =
-          FirebaseStorage.instance.ref().child('your_storage_path/$fileName');
+          FirebaseStorage.instance.ref().child('studyMaterials/$fileName');
 
       UploadTask uploadTask = storageReference.putFile(imageFile);
       await uploadTask.whenComplete(() => print('Image uploaded'));

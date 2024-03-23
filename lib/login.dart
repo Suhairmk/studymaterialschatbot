@@ -60,7 +60,7 @@ class _loginState extends State<login> {
                     }
                     return null;
                   },
-                  SizedBox(),
+                  SizedBox(),1
                 ),
                 SizedBox(
                   height: 10,
@@ -82,7 +82,7 @@ class _loginState extends State<login> {
                         },
                         icon: visibility
                             ? Icon(Icons.visibility_off_outlined)
-                            : Icon(Icons.visibility_outlined))),
+                            : Icon(Icons.visibility_outlined)),1),
                 Align(
                     alignment: Alignment.bottomRight,
                     child: TextButton(

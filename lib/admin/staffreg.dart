@@ -29,6 +29,7 @@ class _StaffRegisterState extends State<StaffRegister> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context);
     return Scaffold(
+       backgroundColor: Color.fromRGBO(62, 62, 61, 1),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -56,7 +57,7 @@ class _StaffRegisterState extends State<StaffRegister> {
                       return 'invalid';
                     }
                     return null;
-                  }, SizedBox()),
+                  }, SizedBox(),1),
                   SizedBox(
                     height: 10,
                   ),
@@ -72,7 +73,7 @@ class _StaffRegisterState extends State<StaffRegister> {
                       return 'invalid';
                     }
                     return null;
-                  }, SizedBox()),
+                  }, SizedBox(),1),
                   SizedBox(
                     height: 10,
                   ),
@@ -88,7 +89,7 @@ class _StaffRegisterState extends State<StaffRegister> {
                       return 'invalid';
                     }
                     return null;
-                  }, SizedBox()),
+                  }, SizedBox(),1),
                   SizedBox(
                     height: 10,
                   ),
@@ -108,7 +109,7 @@ class _StaffRegisterState extends State<StaffRegister> {
                         icon: visibility
                             ? Icon(Icons.visibility_off)
                             : Icon(Icons.visibility),
-                      )),
+                      ),1),
                   SizedBox(
                     height: 20,
                   ),

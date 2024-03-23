@@ -9,18 +9,13 @@ import 'package:stdproject/staff/staffViewNotifi.dart';
 import 'package:stdproject/student/Cbscreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
-class StudentHome extends StatefulWidget {
-  const StudentHome({super.key});
-  
+class StudentHome extends StatelessWidget {
+  StudentHome({super.key});
 
   @override
-  State<StudentHome> createState() => _StudentHomeState();
-}
-
-class _StudentHomeState extends State<StudentHome> {
   final Uri _url =
       Uri.parse('https://teams.ac.in/index.php?r=site%2Fstudent-select-inst');
+
   Future<void> _launchUrl() async {
     if (!await launchUrl(_url)) {
       throw Exception('Could not launch $_url');
@@ -54,126 +49,102 @@ class _StudentHomeState extends State<StudentHome> {
         }
       },
       child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            actions: [
-              IconButton(
-                  onPressed: () {
+          drawer: Drawer(
+            child: Column(
+              children: [
+                DrawerHeader(
+                    child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    leading: CircleAvatar(),
+                    title: Text(currentusrdata['name']),
+                    subtitle: Text(currentusrdata['email']),
+                  ),
+                )),
+                ListTile(
+                  trailing: Icon(
+                    Icons.logout,
+                  ),
+                  onTap: () {
                     provider.signOutUser(context);
                   },
-                  icon: Icon(Icons.logout))
-            ],
+                  title: Text('LogOut'),
+                )
+              ],
+            ),
+          ),
+          backgroundColor: Color.fromRGBO(62, 62, 61, 1),
+          appBar: AppBar(
+            iconTheme: IconThemeData(color: Color.fromARGB(255, 243, 250, 249)),
+            backgroundColor: Color.fromARGB(255, 3, 157, 246),
+            elevation: 0,
           ),
           body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [buildContainer(
-                    context,
-                    'ChatBoat',
-                    Icon(
-                      Icons.book,
-                      color: Colors.white,
-                    ), () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Chatbot()));
-                }),
-              
-                buildContainer(
-                    context,
-                    'Attendance',
-                    Icon(
-                      Icons.book_online,
-                      color: Colors.white,
-                    ), () {
-                  _launchUrl();
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => AttentenceWebScreen()));
-                }),],),
-
-                
-                SizedBox(
-                  height: 30,
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                   buildContainer(
-                    context,
-                    'Notifications',
-                    Icon(
-                      Icons.notification_add,
-                      color: Colors.white,
-                    ), () {
-                  Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => StaffViewNotifivation()));
-                }),
-                buildContainer(
-                    context,
-                    'Ai Chat',
-                    Icon(
-                      Icons.chat_bubble_outlined,
-                      color: Colors.white,
-                    ), () {
-                  Navigator.push(
+                      'Study Materials',
+                      Icon(
+                        Icons.book_sharp,
+                        color: Colors.white,
+                      ), () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Chatbot()));
+                  }),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  buildContainer(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => AiScreen()));
-                })
-                ],)
-                
-              ],
+                      'Attendance',
+                      Icon(
+                        Icons.calendar_month,
+                        color: Colors.white,
+                      ), () {
+                    _launchUrl();
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => AttentenceWebScreen()));
+                  }),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  buildContainer(
+                      context,
+                      'Notifications',
+                      Icon(
+                        Icons.notification_add,
+                        color: Colors.white,
+                      ), () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StaffViewNotifivation()));
+                  }),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  buildContainer(
+                      context,
+                      'Ask Expert',
+                      Icon(
+                        Icons.chat_bubble_outlined,
+                        color: Colors.white,
+                      ), () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AiScreen()));
+                  }),
+                  
+                ],
+
+              ),
             ),
           )),
     );
   }
 }
 
-// class AttentenceWebScreen extends StatefulWidget {
-//   AttentenceWebScreen({super.key});
-
-//   @override
-//   State<AttentenceWebScreen> createState() => _AttentenceWebScreenState();
-// }
-
-// class _AttentenceWebScreenState extends State<AttentenceWebScreen> {
-//   late  WebViewController _webViewController = WebViewController();
-
-//   @override
-//   void initState() {
-//     // https://teams.ac.in/index.php?r=site%2Fstudent-select-inst
-//     _webViewController
-//       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-//       ..setBackgroundColor(const Color(0x00000000))
-//       ..setNavigationDelegate(
-//         NavigationDelegate(
-//           onProgress: (int progress) {
-//             // Update loading bar.
-//           },
-//           onPageStarted: (String url) {},
-//           onPageFinished: (String url) {},
-//           onWebResourceError: (WebResourceError error) {},
-          
-//         ),
-//       )
-//       ..loadRequest(Uri.parse(
-//           'https://teams.ac.in/index.php?r=site%2Fstudent-select-inst'));
-//     super.initState();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: WebViewWidget(controller: _webViewController),
-//     );
-//   }
-// }

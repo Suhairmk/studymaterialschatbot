@@ -10,20 +10,15 @@ import 'package:stdproject/login.dart';
 import 'package:stdproject/provider/myProvider.dart';
 import 'package:stdproject/staff/staffViewNotifi.dart';
 
-class StaffMainScreen extends StatefulWidget {
+class StaffMainScreen extends StatelessWidget {
   const StaffMainScreen({super.key});
 
   @override
-  State<StaffMainScreen> createState() => _StaffMainScreenState();
-}
-
-class _StaffMainScreenState extends State<StaffMainScreen> {
-  @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<MyProvider>(context,listen: false);
-     DateTime? currentBackPressTime;
+    var provider = Provider.of<MyProvider>(context, listen: false);
+    DateTime? currentBackPressTime;
     return WillPopScope(
-       onWillPop: () async{
+      onWillPop: () async {
         if (currentBackPressTime == null ||
             DateTime.now().difference(currentBackPressTime!) >
                 Duration(seconds: 2)) {
@@ -44,65 +39,93 @@ class _StaffMainScreenState extends State<StaffMainScreen> {
           return true;
         }
       },
-      child: Scaffold( backgroundColor: Colors.white,
-        appBar: AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    provider.signOutUser(context);
-                    
-                  },
-                  icon: Icon(Icons.logout))
+      child: Scaffold(
+        backgroundColor: const Color.fromRGBO(62, 62, 61, 1),
+        drawer: Drawer(
+          child: Column(
+            children: [
+              DrawerHeader(
+                  child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  leading: CircleAvatar(),
+                  title: Text(currentusrdata['name']),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(currentusrdata['teacherEmail']),
+                      Text('Id: ' + currentusrdata['teacherId']),
+                    ],
+                  ),
+                ),
+              )),
+              ListTile(
+                trailing: Icon(
+                  Icons.logout,
+                ),
+                onTap: () {
+                  provider.signOutUser(context);
+                },
+                title: Text('LogOut'),
+              )
             ],
           ),
-        body: SafeArea(child: Center(
+        ),
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 3, 157, 246),
+          elevation: 0,
+        ),
+        body: SafeArea(
+            child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-            buildContainer(
+              buildContainer(
                   context,
                   'Upload',
-                  
                   Icon(
                     Icons.upload,
                     color: Colors.white,
                   ), () {
-                 navigation(UploadViewScreen(role: 'staff',));
+                navigation(UploadViewScreen(
+                  role: 'staff',
+                ),context);
               }),
-             
               SizedBox(
                 height: 30,
               ),
               buildContainer(
                   context,
                   'View',
-                 
                   Icon(
                     Icons.view_carousel_outlined,
                     color: Colors.white,
                   ), () {
-                 navigation(ViewStdMetreals(role: 'staff',));
+                navigation(ViewStdMetreals(
+                  role: 'staff',
+                ),context);
               }),
-             
               SizedBox(
-                height: 30,),
+                height: 30,
+              ),
               buildContainer(
                   context,
                   'Notifications',
-                  
                   Icon(
                     Icons.notification_add,
                     color: Colors.white,
                   ), () {
-                navigation(StaffViewNotifivation());
+                navigation(StaffViewNotifivation(),context);
               })
-          ],),
-        )),),
+            ],
+          ),
+        )),
+      ),
     );
   }
-   void navigation(screen) {
+
+  void navigation(screen,context) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
   }
 }

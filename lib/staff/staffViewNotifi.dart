@@ -10,7 +10,7 @@ class StaffViewNotifivation extends StatefulWidget {
 }
 
 class _StaffViewNotifivationState extends State<StaffViewNotifivation> {
- List<Map<String, dynamic>> notifications = [];
+  List<Map<String, dynamic>> notifications = [];
 
   @override
   void initState() {
@@ -29,7 +29,9 @@ class _StaffViewNotifivationState extends State<StaffViewNotifivation> {
     var provider = Provider.of<MyProvider>(context);
 
     return Scaffold(
+        backgroundColor: const Color.fromRGBO(62, 62, 61, 1),
         appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 3, 157, 246),
           title: Text('Notifications'),
         ),
         body: SafeArea(
@@ -39,14 +41,23 @@ class _StaffViewNotifivationState extends State<StaffViewNotifivation> {
                 child: ListView.builder(
                   itemCount: notifications.length,
                   itemBuilder: (BuildContext context, int index) {
-                    
                     return Card(
-                      child: ListTile(
-                        title: Text(notifications[index]['title']),
-                        subtitle: Text(notifications[index]['body']),
-                        trailing: Text(
-                         notifications[index]['time'].toString(),
-                        ),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            title: Text(notifications[index]['title']),
+                            subtitle: Text(notifications[index]['body']),
+                          ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                notifications[index]['time'].toString(),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },

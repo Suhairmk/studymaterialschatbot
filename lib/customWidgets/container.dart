@@ -8,10 +8,10 @@ Widget buildContainer(context, text, icon, ontap) {
       width: 150,
       height: 100,
       decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 19, 139, 238),
+          color: Color.fromRGBO(62, 62, 61, 1),
           borderRadius: BorderRadius.circular(5),
           boxShadow: [
-            BoxShadow(blurRadius: 8, spreadRadius: 2, color: Colors.grey)
+            BoxShadow(blurRadius: 0, spreadRadius: 2, color: Colors.grey)
           ]),
       child: Center(
           child: Column(

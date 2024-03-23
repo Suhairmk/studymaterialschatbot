@@ -1,13 +1,20 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:stdproject/Dashboard.dart';
 import 'package:stdproject/admin/adminmain.dart';
 import 'package:stdproject/login.dart';
 import 'package:stdproject/model/dataModel.dart';
 import 'package:stdproject/staff/staffMain.dart';
 import 'package:stdproject/student/studHome.dart';
+import 'package:http/http.dart' as http;
+
+Map<String, dynamic> currentusrdata = {};
 
 class MyProvider extends ChangeNotifier {
   String text = 'START';
@@ -86,6 +93,11 @@ class MyProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  void clearChat() {
+    widgetList.clear();
+    notifyListeners();
+  }
+
 //teacher registration
   Future<void> registerAndStoreData(email, password, data, context) async {
     try {
@@ -160,30 +172,27 @@ class MyProvider extends ChangeNotifier {
           userEmail,
         );
 
-       
-          showSnackbar(context, 'Login Success', Colors.green);
-          // Navigate based on the collection name
-          if (collectionName == 'teachers') {
-            // Navigate to the teacher panel
-            navigation(context, StaffMainScreen());
-          } else if (collectionName == 'students') {
-            if (userCredential.user!.emailVerified) {
-               navigation(context, StudentHome());
-            }else{
-            showSnackbar(context, 'Email not verified', Colors.red);
-          FirebaseAuth.instance.signOut();
-            }
-            // Navigate to the student panel
-           
-          } else if (collectionName == 'admin') {
-            // Navigate to the student panel
-            navigation(context, AdminMain());
+        showSnackbar(context, 'Login Success', Colors.green);
+        // Navigate based on the collection name
+        if (collectionName == 'teachers') {
+          // Navigate to the teacher panel
+          navigation(context, StaffMainScreen());
+        } else if (collectionName == 'students') {
+          if (userCredential.user!.emailVerified) {
+            navigation(context, StudentHome());
           } else {
-            // Handle other roles or scenarios
-            print('Unknown role for user with email: $userEmail');
-            showSnackbar(context, 'Can\'t find the user', Colors.red);
+            showSnackbar(context, 'Email not verified', Colors.red);
+            FirebaseAuth.instance.signOut();
           }
-       
+          // Navigate to the student panel
+        } else if (collectionName == 'admin') {
+          // Navigate to the student panel
+          navigation(context, AdminMain());
+        } else {
+          // Handle other roles or scenarios
+          print('Unknown role for user with email: $userEmail');
+          showSnackbar(context, 'Can\'t find the user', Colors.red);
+        }
       }
     } catch (e) {
       // Handle login errors
@@ -194,35 +203,37 @@ class MyProvider extends ChangeNotifier {
   }
 
 //getting user role(collection name)
-  Future<String> getUserCollectionName(
-    String userEmail,
-  ) async {
+  Future<String> getUserCollectionName(String userEmail) async {
     List<String> possibleCollections = ['teachers', 'students', 'admin'];
 
     try {
-      // String uid = userCredential.user.uid;
-      // print('User ID: $uid');
-
       for (String collectionName in possibleCollections) {
         // Query the Firestore collection to check if the user's document exists
-        DocumentSnapshot userDoc =
-            await _firestore.collection(collectionName).doc(userEmail).get();
-        print('Collection: $collectionName, Document: $userDoc');
+        DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore
+            .instance
+            .collection(collectionName)
+            .doc(userEmail)
+            .get();
+        print('Collection: $collectionName, Document: ${userDoc.data()}');
 
         // If the user document exists in the current collection, return the collection name
         if (userDoc.exists) {
           print('User found in $collectionName');
+          // Extract data from the document if needed
+          Map<String, dynamic>? userData = userDoc.data();
+          if (userData != null) {
+            currentusrdata = userData;
+            print(currentusrdata);
+          }
           return collectionName;
         }
       }
-
-      // Handle the case where the user document does not exist in any collection
-      print('User document not found for email: $userEmail');
-      return '';
+      // If the user document is not found in any collection
+      print('User not found in any collection');
+      return ''; // Return an empty string or handle appropriately
     } catch (e) {
-      // Handle Firestore query errors
-      print('Error querying Firestore: $e');
-      return '';
+      print("Error getting user collection name: $e");
+      return ''; // Return an empty string or handle appropriately
     }
   }
 
@@ -234,7 +245,7 @@ class MyProvider extends ChangeNotifier {
           FirebaseFirestore.instance.collection('notifications');
       String time = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
       // Add a new document with a generated ID
-      await notifications.add({
+      await notifications.doc(title).set({
         'title': title,
         'body': body,
         'timestamp': DateTime.now(),
@@ -293,7 +304,7 @@ class MyProvider extends ChangeNotifier {
       Map<String, dynamic> studyMaterialJson = studyMaterial.toJson();
 
       // Add the JSON object to the collection
-      await studyMaterials.add(studyMaterialJson);
+      await studyMaterials.doc(studyMaterial.title).set(studyMaterialJson);
 
       print('Study material uploaded successfully!');
       showSnackbar(context, 'uploaded Successfully', Colors.green);
@@ -427,6 +438,71 @@ class MyProvider extends ChangeNotifier {
             ],
           );
         });
+  }
+
+//download to phone
+  Future<void> downloadFile(String downloadUrl, context, name) async {
+    try {
+      final response = await http.get(Uri.parse(downloadUrl));
+      if (response.statusCode == 200) {
+        // Extract Content-Type header
+        print(response.body);
+
+        String extension = '';
+        if (downloadUrl.toLowerCase().contains('.pdf')) {
+          extension = '.pdf';
+        } else if (downloadUrl.toLowerCase().contains('.jpg')) {
+          extension = '.jpg';
+        }
+        if (downloadUrl.toLowerCase().contains('.png')) {
+          extension = '.png';
+        }
+        if (downloadUrl.toLowerCase().contains('.gif')) {
+          extension = '.gif';
+        }
+        if (downloadUrl.toLowerCase().contains('.jpeg')) {
+          extension = '.jpg';
+        }
+        if (downloadUrl.toLowerCase().contains('.doc')) {
+          extension = '.doc';
+        }
+        if (downloadUrl.toLowerCase().contains('.ppt')) {
+          extension = '.ppt';
+        }
+        if (downloadUrl.toLowerCase().contains('.txt')) {
+          extension = '.txt';
+        }
+        // Determine file extension based on Content-Type
+
+        var status = await Permission.manageExternalStorage.request();
+        if (status.isGranted) {
+          print("Permissions granted");
+        } else {
+          print("Permissions denied");
+        }
+
+        
+
+        final appDir = '/storage/emulated/0/StudyMaterials';
+        Directory directory = Directory(appDir);
+        await directory.create(recursive: true);
+
+        final filePath = '$appDir/$name$extension';
+
+        final file = File(filePath);
+        await file.writeAsBytes(response.bodyBytes);
+
+        // File downloaded successfully
+        print('File downloaded to: $filePath');
+        showSnackbar(context, 'Downloaded', Colors.white);
+      } else {
+        // Handle HTTP error
+        print('HTTP error: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle other errors
+      print('Error downloading file: $e');
+    }
   }
 
 //forgot password

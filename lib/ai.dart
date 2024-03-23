@@ -29,14 +29,16 @@ class _AiScreenState extends State<AiScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue[100],
-        title: Text('Ai Chatbot'),
+        title: Text('Ask Expert'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Expanded(
               child: ListView.builder(
                 itemCount: chatHistory.length,
@@ -76,28 +78,33 @@ class _AiScreenState extends State<AiScreen> {
                       ),
                     ),
                   ),
-                  IconButton(
-                    onPressed: () async {
-                      if (inputController.text.isNotEmpty) {
-                         setState(() {
-                        isSending = true;
-                      });
-                      await sendDatatoAi();
-                      setState(() {
-                        isSending = false;
-                      });
-                      }
-                     
-                    },
-                    icon: isSending
-                        ? Container(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2,),
-                          )
-                        : Icon(
-                            Icons.send,
-                          ),
+                  CircleAvatar(
+                    backgroundColor: Colors.blue,
+                    child: IconButton(
+                      color: Colors.white,
+                      onPressed: () async {
+                        if (inputController.text.isNotEmpty) {
+                          setState(() {
+                            isSending = true;
+                          });
+                          await sendDatatoAi();
+                          setState(() {
+                            isSending = false;
+                          });
+                        }
+                      },
+                      icon: isSending
+                          ? Container(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : Icon(
+                              Icons.send_outlined,
+                            ),
+                    ),
                   ),
                 ],
               ),
@@ -118,7 +125,8 @@ class _AiScreenState extends State<AiScreen> {
       String response = result?.output ?? 'Something went wrong';
       chatHistory.add(Message(response, false));
     } catch (e) {
-      Provider.of<MyProvider>(context).showSnackbar(context, e.toString(), Colors.red);
+      Provider.of<MyProvider>(context)
+          .showSnackbar(context, e.toString(), Colors.red);
       print(e);
     }
 

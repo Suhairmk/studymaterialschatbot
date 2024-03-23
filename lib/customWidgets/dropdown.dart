@@ -1,16 +1,11 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
-class BuildDropdown extends StatefulWidget {
+class BuildDropdown extends StatelessWidget {
   BuildDropdown({super.key, required this.items, required this.selecedValue,required this.onchanged});
   final List<String> items;
   String selecedValue;
   final onchanged;
-  @override
-  State<BuildDropdown> createState() => _BuildDropdownState();
-}
-
-class _BuildDropdownState extends State<BuildDropdown> {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
@@ -39,7 +34,7 @@ class _BuildDropdownState extends State<BuildDropdown> {
             ),
           ],
         ),
-        items: widget.items
+        items: items
             .map((String item) => DropdownMenuItem<String>(
                   value: item,
                   child: Text(
@@ -53,8 +48,8 @@ class _BuildDropdownState extends State<BuildDropdown> {
                   ),
                 ))
             .toList(),
-        value: widget.selecedValue,
-        onChanged:widget.onchanged,
+        value: selecedValue,
+        onChanged:onchanged,
         buttonStyleData: ButtonStyleData(
           height: 50,
           width: 160,

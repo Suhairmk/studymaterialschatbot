@@ -39,17 +39,13 @@ class _ViewStdMetrealsState extends State<ViewStdMetreals> {
         subjects = [...sem1sub];
       } else if (selectedSemester == 'sem 6') {
         subjects = [...sem6sub];
-      }
-      else if (selectedSemester == 'sem 2') {
+      } else if (selectedSemester == 'sem 2') {
         subjects = [...sem2sub];
-      }
-      else if (selectedSemester == 'sem 3') {
+      } else if (selectedSemester == 'sem 3') {
         subjects = [...sem3sub];
-      }
-      else if (selectedSemester == 'sem 4') {
+      } else if (selectedSemester == 'sem 4') {
         subjects = [...sem4sub];
-      }
-      else if (selectedSemester == 'sem 5') {
+      } else if (selectedSemester == 'sem 5') {
         subjects = [...sem5sub];
       } else {
         subjects = ['Select subject'];
@@ -62,7 +58,11 @@ class _ViewStdMetrealsState extends State<ViewStdMetreals> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Filter Options'),
+          backgroundColor: Color.fromRGBO(62, 62, 61, 1),
+          title: Text(
+            'Filter Options',
+            style: TextStyle(color: Colors.white),
+          ),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return Container(
@@ -142,7 +142,9 @@ class _ViewStdMetrealsState extends State<ViewStdMetreals> {
   Widget build(BuildContext context) {
     var provider = Provider.of<MyProvider>(context, listen: false);
     return Scaffold(
+      backgroundColor: Color.fromRGBO(62, 62, 61, 1),
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 3, 157, 246),
         actions: [
           IconButton(
             onPressed: () {
